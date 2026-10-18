@@ -3,127 +3,70 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="AccessKlar analysiert Ihre Microsoft-Access-Datenbank und erstellt einen verständlichen Bericht zu Struktur, Zusammenhängen, VBA-Logik, Risiken und nächsten Schritten.">
-  <title>AccessKlar – Ihre Access-Datenbank endlich verstehen</title>
-  <style>
-    :root{
-      --bg:#f7f9fc;--surface:#fff;--text:#172033;--muted:#5b6577;
-      --brand:#2457d6;--brand-dark:#173b98;--line:#dfe5ee;
-      --ok:#147a55;--shadow:0 18px 50px rgba(31,44,74,.09);
-      --radius:18px;--max:1120px;
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
-    a{color:inherit}
-    .wrap{width:min(var(--max),calc(100% - 32px));margin:auto}
-    header{position:sticky;top:0;z-index:10;background:rgba(247,249,252,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(223,229,238,.9)}
-    nav{height:70px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-    .brand{font-weight:800;font-size:1.2rem;text-decoration:none;letter-spacing:-.02em}
-    .brand span{color:var(--brand)}
-    .navlinks{display:flex;align-items:center;gap:18px;font-size:.95rem}
-    .navlinks a{text-decoration:none;color:var(--muted)}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;padding:.84rem 1.15rem;border-radius:11px;text-decoration:none;font-weight:700;border:1px solid transparent;transition:.18s ease}
-    .btn-primary{background:var(--brand);color:#fff;box-shadow:0 8px 24px rgba(36,87,214,.18)}
-    .btn-primary:hover{background:var(--brand-dark);transform:translateY(-1px)}
-    .btn-secondary{background:#fff;border-color:var(--line)}
-    .hero{padding:92px 0 60px}
-    .hero-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:44px;align-items:center}
-    .eyebrow{display:inline-flex;gap:.45rem;align-items:center;background:#eaf0ff;color:var(--brand-dark);padding:.38rem .7rem;border-radius:999px;font-weight:700;font-size:.85rem}
-    h1{font-size:clamp(2.45rem,5.5vw,4.8rem);line-height:1.02;letter-spacing:-.055em;margin:.9rem 0 1.25rem}
-    .lead{font-size:1.18rem;color:var(--muted);max-width:720px}
-    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
-    .trustline{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:.93rem;margin-top:20px}
-    .trustline span:before{content:"✓";color:var(--ok);font-weight:900;margin-right:7px}
-    .report{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:24px;padding:24px}
-    .report-top{display:flex;justify-content:space-between;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--line)}
-    .dots{display:flex;gap:6px}.dots i{width:9px;height:9px;border-radius:50%;background:#cad2df}
-    .report h3{margin:22px 0 12px}
-    .metric{padding:13px 14px;background:#f6f8fb;border:1px solid #edf0f5;border-radius:12px;margin:10px 0}
-    .metric strong{display:block;font-size:.92rem}
-    .metric small{color:var(--muted)}
-    section{padding:72px 0}
-    .section-head{max-width:740px;margin-bottom:30px}
-    h2{font-size:clamp(1.8rem,3.3vw,2.75rem);line-height:1.1;letter-spacing:-.035em;margin:0 0 12px}
-    .muted{color:var(--muted)}
-    .steps,.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:25px}
-    .num{width:36px;height:36px;border-radius:10px;background:#eaf0ff;color:var(--brand);display:grid;place-items:center;font-weight:800;margin-bottom:16px}
-    .card h3{margin:.2rem 0 .5rem;font-size:1.06rem}
-    .card p{margin:0;color:var(--muted)}
-    .feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
-    .feature-list{display:grid;gap:12px}
-    .feature{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
-    .feature:last-child{border-bottom:0}
-    .check{flex:0 0 28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#e7f5ef;color:var(--ok);font-weight:900}
-    .feature b{display:block}
-    .feature span{color:var(--muted);font-size:.95rem}
-    .decision{background:#101a2d;color:#fff;border-radius:26px;padding:clamp(28px,5vw,58px);display:grid;grid-template-columns:1.2fr .8fr;gap:26px;align-items:center}
-    .decision p{color:#c7cfdb;max-width:680px}
-    .decision .btn-secondary{border-color:#33415a;background:#17243a;color:#fff}
-    .security{display:grid;grid-template-columns:.8fr 1.2fr;gap:34px;align-items:start}
-    .notice{background:#eef8f4;border:1px solid #d9eee6;border-radius:18px;padding:22px}
-    .notice strong{color:#0e6245}
-    .faq{display:grid;gap:10px}
-    details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:0 18px}
-    summary{cursor:pointer;font-weight:700;padding:18px 0}
-    details p{color:var(--muted);margin:0 0 18px}
-    .final{padding-top:35px}
-    .final-box{text-align:center;background:#fff;border:1px solid var(--line);border-radius:28px;padding:58px 24px;box-shadow:var(--shadow)}
-    footer{padding:32px 0 46px;color:var(--muted);font-size:.92rem}
-    .footer-row{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:25px}
-    .legal{display:flex;gap:16px;flex-wrap:wrap}.legal a{text-decoration:none}
-    @media(max-width:820px){
-      .hero{padding-top:60px}.hero-grid,.feature-grid,.decision,.security{grid-template-columns:1fr}
-      .steps,.cards{grid-template-columns:1fr}.report{order:2}
-      .navlinks a:not(.btn){display:none}
-      h1{font-size:clamp(2.4rem,13vw,4rem)}
-    }
-  </style>
+  <meta name="description" content="AccessAnalyzer analysiert Ihre Microsoft-Access-Datenbank und erstellt einen verständlichen Bericht zu Tabellen, Beziehungen, VBA-Logik, Risiken und Empfehlungen. Jetzt Demo anfordern.">
+  <title>AccessAnalyzer – Ihre Access-Datenbank verstehen. Demo anfordern.</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f766e'/%3E%3Cpath d='M9 22V10h6a4 4 0 010 8h-3' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<a class="skip" href="#inhalt">Zum Inhalt springen</a>
 <header>
   <div class="wrap">
     <nav aria-label="Hauptnavigation">
-      <a class="brand" href="#">Access<span>Klar</span></a>
+      <a class="brand" href="index.html" aria-label="AccessAnalyzer – Startseite">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0f766e"/><path d="M9 22V10h6a4 4 0 010 8h-3" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+        <strong>Access<span>Analyzer</span></strong>
+      </a>
       <div class="navlinks">
         <a href="#so-funktionierts">So funktioniert's</a>
         <a href="#bericht">Der Bericht</a>
-        <a href="#sicherheit">Datenschutz</a>
-        <a class="btn btn-primary" href="https://www.accessklar.de/hochladen/">Access-Datei analysieren</a>
+        <a href="#zielgruppe">Für wen</a>
+        <a href="#faq">FAQ</a>
+        <a class="btn btn-primary" href="#demo">Demo anfordern</a>
       </div>
     </nav>
   </div>
 </header>
 
-<main>
+<main id="inhalt">
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <div class="eyebrow">Microsoft Access verständlich gemacht</div>
-        <h1>Wissen, was Ihre Access-Datenbank wirklich macht.</h1>
-        <p class="lead">AccessKlar analysiert gewachsene Access-Datenbanken und erstellt daraus einen verständlichen Bericht zu Struktur, Zusammenhängen, VBA-Logik, Risiken und sinnvollen nächsten Schritten.</p>
+        <div class="eyebrow">Analyse für Microsoft Access</div>
+        <h1>Verstehen, was Ihre <em>Access-Datenbank</em> wirklich tut.</h1>
+        <p class="lead">AccessAnalyzer liest Ihre gewachsene <code>.accdb</code>- oder <code>.mdb</code>-Datei aus und erstellt einen verständlichen deutschsprachigen Bericht: Tabellen, Beziehungen, VBA-Logik, Risiken und Empfehlungen – als Grundlage für Ihre nächste Entscheidung.</p>
         <div class="actions">
-          <a class="btn btn-primary" href="https://www.accessklar.de/hochladen/">Access-Datei hochladen</a>
+          <a class="btn btn-primary" href="#demo">Demo anfordern</a>
           <a class="btn btn-secondary" href="#bericht">Was Sie erhalten</a>
         </div>
         <div class="trustline">
-          <span>Keine Registrierung</span>
-          <span>Bericht auch als PDF</span>
+          <span>Ohne Benutzerkonto</span>
+          <span>Bericht im Browser &amp; als PDF</span>
           <span>Datei wird automatisch gelöscht</span>
         </div>
       </div>
 
       <aside class="report" aria-label="Beispielhafte Berichtsvorschau">
         <div class="report-top">
-          <strong>Analysebericht</strong>
-          <div class="dots"><i></i><i></i><i></i></div>
+          <strong>Analysebericht (Beispiel)</strong>
+          <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
         </div>
-        <h3>Ihre Datenbank auf einen Blick</h3>
-        <div class="metric"><strong>Zweck & Aufbau</strong><small>Wofür die Datenbank vermutlich eingesetzt wird</small></div>
-        <div class="metric"><strong>Tabellen & Beziehungen</strong><small>Welche Daten wichtig sind und wie sie zusammenhängen</small></div>
-        <div class="metric"><strong>Logik & Automatisierung</strong><small>Welche Prozesse in Abfragen und VBA stecken</small></div>
-        <div class="metric"><strong>Risiken & nächste Schritte</strong><small>Wo Handlungsbedarf bestehen kann</small></div>
+        <h3>Zusammenhänge auf einen Blick</h3>
+        <svg class="er" viewBox="0 0 360 200" role="img" aria-label="Schematische Darstellung: Tabellen Kunden, Bestellungen und Artikel mit Beziehungen">
+          <line x1="118" y1="62" x2="150" y2="62"/>
+          <line x1="250" y1="62" x2="282" y2="62"/>
+          <line x1="200" y1="94" x2="200" y2="138"/>
+          <rect class="t" x="16" y="30" width="102" height="64" rx="8"/><rect class="h" x="16" y="30" width="102" height="22" rx="8"/><text class="h-text" x="28" y="45">Kunden</text><text x="28" y="70">KundenNr</text><text x="28" y="84">Name</text>
+          <rect class="t" x="150" y="30" width="100" height="64" rx="8"/><rect class="h" x="150" y="30" width="100" height="22" rx="8"/><text class="h-text" x="162" y="45">Bestellungen</text><text x="162" y="70">BestellNr</text><text x="162" y="84">KundenNr</text>
+          <rect class="t" x="282" y="30" width="64" height="64" rx="8"/><rect class="h" x="282" y="30" width="64" height="22" rx="8"/><text class="h-text" x="292" y="45">Artikel</text><text x="292" y="70">ArtNr</text><text x="292" y="84">Preis</text>
+          <rect class="t" x="140" y="138" width="120" height="48" rx="8"/><rect class="h" x="140" y="138" width="120" height="22" rx="8"/><text class="h-text" x="152" y="153">Bestelldetails</text><text x="152" y="177">BestellNr · ArtNr</text>
+        </svg>
+        <div class="tags">
+          <span class="tag">Tabellen &amp; Beziehungen</span>
+          <span class="tag">VBA-Logik erklärt</span>
+          <span class="tag warn">Auffälligkeiten</span>
+          <span class="tag risk">Risiken</span>
+        </div>
       </aside>
     </div>
   </section>
@@ -131,13 +74,13 @@
   <section id="so-funktionierts">
     <div class="wrap">
       <div class="section-head">
-        <h2>In drei Schritten zur Klarheit</h2>
+        <h2>In drei Schritten zum Überblick</h2>
         <p class="muted">Sie brauchen kein neues System und keine lange Beratung. Für den ersten Überblick genügt Ihre bestehende Access-Datei.</p>
       </div>
       <div class="steps">
-        <article class="card"><div class="num">1</div><h3>Datei hochladen</h3><p>Laden Sie Ihre .accdb- oder .mdb-Datei über den bestehenden sicheren Upload hoch.</p></article>
-        <article class="card"><div class="num">2</div><h3>Analyse durchführen lassen</h3><p>Strukturen, Beziehungen und – soweit technisch möglich – enthaltene Programmlogik werden ausgewertet.</p></article>
-        <article class="card"><div class="num">3</div><h3>Bericht erhalten</h3><p>Sie erhalten eine verständliche Online-Auswertung und einen Bericht, den Sie intern als PDF weitergeben können.</p></article>
+        <article class="card"><div class="num">1</div><h3>Datei bereitstellen</h3><p>Sie übergeben Ihre <code>.accdb</code>- oder <code>.mdb</code>-Datei über einen sicheren, verschlüsselten Upload – ohne Benutzerkonto.</p></article>
+        <article class="card"><div class="num">2</div><h3>Automatisch analysieren</h3><p>Tabellen, Felder, Beziehungen, Abfragen und enthaltener VBA-Code werden ausgelesen und fachlich eingeordnet.</p></article>
+        <article class="card"><div class="num">3</div><h3>Bericht erhalten</h3><p>Sie lesen den Bericht im Browser und laden ihn als PDF herunter – zum Weitergeben an Geschäftsführung, Fachabteilung oder Dienstleister.</p></article>
       </div>
     </div>
   </section>
@@ -146,30 +89,32 @@
     <div class="wrap feature-grid">
       <div>
         <div class="eyebrow">Kein Entwicklerwissen nötig</div>
-        <h2>Ein Bericht, mit dem auch Nicht‑Programmierer arbeiten können.</h2>
-        <p class="muted">Die Analyse schafft eine gemeinsame Grundlage für Geschäftsführung, Fachabteilung und technische Dienstleister – bevor Sie Geld in Modernisierung, Weiterentwicklung oder Ersatz investieren.</p>
+        <h2>Ein Bericht, mit dem auch Nicht-Programmierer arbeiten können.</h2>
+        <p class="muted">Gewachsene Access-Lösungen sind oft schlecht dokumentiert und hängen an einzelnen Personen. AccessAnalyzer macht das Wissen sichtbar – bevor Sie in Pflege, Modernisierung oder Ablösung investieren.</p>
       </div>
       <div class="feature-list">
-        <div class="feature"><div class="check">✓</div><div><b>Zweck der Datenbank</b><span>Eine kurze Einordnung, wofür die Anwendung offenbar genutzt wird.</span></div></div>
-        <div class="feature"><div class="check">✓</div><div><b>Wichtige Tabellen</b><span>Welche Datenstrukturen zentral sind und was sie bedeuten.</span></div></div>
-        <div class="feature"><div class="check">✓</div><div><b>Beziehungen</b><span>Wie die verschiedenen Datenbereiche miteinander verbunden sind.</span></div></div>
-        <div class="feature"><div class="check">✓</div><div><b>Geschäftslogik</b><span>Welche Berechnungen, Abläufe und Automatisierungen enthalten sind.</span></div></div>
-        <div class="feature"><div class="check">✓</div><div><b>Risiken & Empfehlungen</b><span>Hinweise auf Auffälligkeiten und neutral formulierte nächste Schritte.</span></div></div>
+        <div class="feature"><div class="check" aria-hidden="true">✓</div><div><b>Zweck und Aufbau</b><span>Eine verständliche Einordnung, wofür die Datenbank offenbar genutzt wird.</span></div></div>
+        <div class="feature"><div class="check" aria-hidden="true">✓</div><div><b>Tabellen und Beziehungen</b><span>Welche Datenstrukturen zentral sind und wie sie zusammenhängen.</span></div></div>
+        <div class="feature"><div class="check" aria-hidden="true">✓</div><div><b>Geschäftslogik in VBA</b><span>Welche Berechnungen, Abläufe und Automatisierungen im Code stecken – in Klartext erklärt.</span></div></div>
+        <div class="feature"><div class="check" aria-hidden="true">✓</div><div><b>Risiken und Empfehlungen</b><span>Auffälligkeiten und neutral formulierte nächste Schritte als Entscheidungsgrundlage.</span></div></div>
+        <div class="feature"><div class="check" aria-hidden="true">✓</div><div><b>PDF-Export</b><span>Der fertige Bericht lässt sich als PDF speichern und intern weitergeben.</span></div></div>
       </div>
     </div>
   </section>
 
-  <section>
+  <section id="zielgruppe">
     <div class="wrap">
-      <div class="decision">
+      <div class="audience">
         <div>
           <h2>Erst verstehen. Dann entscheiden.</h2>
-          <p>Weiter wie bisher, selbst modernisieren oder externe Unterstützung holen? Die richtige Entscheidung beginnt damit, dass Sie wissen, was Ihre bestehende Access-Anwendung tatsächlich leistet.</p>
+          <p>Weiter wie bisher, selbst modernisieren oder externe Unterstützung holen? Die Analyse verändert Ihre Datenbank nicht – sie liefert die Bestandsaufnahme, auf der Sie sicher entscheiden.</p>
         </div>
-        <div class="actions">
-          <a class="btn btn-primary" href="https://www.accessklar.de/hochladen/">Analyse starten</a>
-          <a class="btn btn-secondary" href="#faq">Häufige Fragen</a>
-        </div>
+        <ul>
+          <li>Unternehmen mit gewachsenen Access-Lösungen ohne aktuelle Dokumentation</li>
+          <li>IT-Verantwortliche, die eine Übernahme oder Ablösung vorbereiten</li>
+          <li>Berater und Entwickler, die sich schnell in fremde Datenbanken einarbeiten</li>
+          <li>Teams, die Wissensrisiken bei Personalwechsel verringern wollen</li>
+        </ul>
       </div>
     </div>
   </section>
@@ -179,12 +124,12 @@
       <div>
         <div class="eyebrow">Datenschutz</div>
         <h2>Ihre Datei bleibt geschützt.</h2>
-        <p class="muted">Gerade Access-Datenbanken können sensible Unternehmensdaten enthalten. Deshalb gehört der Umgang mit der hochgeladenen Datei sichtbar auf die Landingpage.</p>
+        <p class="muted">Access-Datenbanken können sensible Unternehmensdaten enthalten. Deshalb ist der Umgang mit Ihrer Datei Teil des Konzepts.</p>
       </div>
       <div class="notice">
-        <strong>Wichtig:</strong>
-        <p>Die Datei wird zweckgebunden für den Analysebericht verarbeitet, geschützt gespeichert und spätestens nach der vorgesehenen Frist automatisch gelöscht. Laut bestehendem Upload-Hinweis werden für die KI-gestützte Berichterstellung nur Datenbank-Strukturdaten und VBA-Code übermittelt – nicht die eigentlichen Tabellendatensätze.</p>
-        <a href="https://www.accessklar.de/datenschutz/">Details zum Datenschutz →</a>
+        <strong>So gehen wir mit Ihren Daten um:</strong>
+        <p>Die Datei wird verschlüsselt abgelegt und nach einer festgelegten Aufbewahrungsfrist automatisch gelöscht. Für die KI-gestützte Berichterstellung werden ausschließlich Strukturdaten (z. B. Tabellen- und Felddefinitionen, Beziehungen) und VBA-Code übermittelt – nicht die eigentlichen Tabellendatensätze. Die Daten werden nicht zum Training von KI-Modellen verwendet.</p>
+        <a href="datenschutz.html">Details zum Datenschutz →</a>
       </div>
     </div>
   </section>
@@ -195,10 +140,82 @@
         <h2>Häufige Fragen</h2>
       </div>
       <div class="faq">
-        <details><summary>Muss ich ein Benutzerkonto anlegen?</summary><p>Nein. Der bestehende AccessKlar-Prozess funktioniert ohne Registrierung und Benutzerkonto.</p></details>
-        <details><summary>Welche Dateien kann ich hochladen?</summary><p>Microsoft-Access-Dateien im Format .accdb oder .mdb.</p></details>
-        <details><summary>Wird meine Datenbank automatisch modernisiert?</summary><p>Nein. Die Analyse verändert Ihre bestehende Datenbank nicht. Sie erhalten zunächst eine verständliche Bestandsaufnahme als Entscheidungsgrundlage.</p></details>
-        <details><summary>Ist eine spätere Web-Anwendung möglich?</summary><p>AccessKlar beschreibt eine spätere Modernisierung zu einer browserbasierten Anwendung als weiterführende Leistung in Entwicklung. Die Analyse verpflichtet Sie zu keinem weiteren Schritt.</p></details>
+        <details><summary>Muss ich ein Benutzerkonto anlegen?</summary><p>Nein. AccessAnalyzer funktioniert ohne Registrierung und Benutzerkonto. Der Zugriff auf Ihren Auftrag erfolgt über einen persönlichen, nicht erratbaren Link.</p></details>
+        <details><summary>Welche Dateien werden unterstützt?</summary><p>Microsoft-Access-Dateien im Format <code>.accdb</code> und <code>.mdb</code>.</p></details>
+        <details><summary>Wird meine Datenbank verändert?</summary><p>Nein. Die Analyse liest Ihre Datei nur aus. Sie erhalten eine Bestandsaufnahme – kein automatisches Umbauen oder Migrieren.</p></details>
+        <details><summary>Was passiert in der Demo?</summary><p>Wir zeigen Ihnen den Ablauf von der Bereitstellung der Datei bis zum fertigen Bericht und beantworten Ihre Fragen zu Datenschutz, Umfang und Einsatzmöglichkeiten. Die Demo ist unverbindlich.</p></details>
+        <details><summary>Kann ich die Demo mit meiner eigenen Datenbank sehen?</summary><p>Das besprechen wir im Vorgespräch. Wenn Sie keine eigene Datei verwenden möchten, zeigen wir die Analyse an einer Beispieldatenbank.</p></details>
+        <details><summary>In welcher Sprache ist der Bericht?</summary><p>Der Analysebericht wird auf Deutsch erstellt. Die Oberfläche der Anwendung steht auf Deutsch, Englisch und Französisch zur Verfügung.</p></details>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="demo" class="demo">
+    <div class="wrap">
+      <div class="demo-box">
+        <div>
+          <div class="eyebrow">Unverbindlich &amp; kostenlos</div>
+          <h2>Demo anfordern</h2>
+          <p class="muted">Sehen Sie in einer persönlichen Vorführung, wie AccessAnalyzer aus einer Access-Datenbank einen verständlichen Bericht erstellt.</p>
+          <ul class="demo-points">
+            <li>Live-Durchlauf von der Datei bis zum fertigen Bericht</li>
+            <li>Antworten zu Datenschutz, Umfang und Einsatz in Ihrem Umfeld</li>
+            <li>Rückmeldung in der Regel innerhalb von zwei Werktagen</li>
+          </ul>
+        </div>
+
+        <form id="demo-formular" data-empfaenger="demo@access-analyzer.de" action="mailto:demo@access-analyzer.de?subject=Demo-Anfrage%20AccessAnalyzer" method="post" enctype="text/plain" novalidate>
+          <div class="form-grid">
+            <div class="field">
+              <label for="name">Name *</label>
+              <input id="name" name="name" type="text" autocomplete="name" required maxlength="120">
+            </div>
+            <div class="field">
+              <label for="firma">Firma <small>(optional)</small></label>
+              <input id="firma" name="firma" type="text" autocomplete="organization" maxlength="120">
+            </div>
+            <div class="field">
+              <label for="email">E-Mail *</label>
+              <input id="email" name="email" type="email" autocomplete="email" required maxlength="160">
+            </div>
+            <div class="field">
+              <label for="telefon">Telefon <small>(optional)</small></label>
+              <input id="telefon" name="telefon" type="tel" autocomplete="tel" maxlength="60">
+            </div>
+            <div class="field">
+              <label for="umfang">Ihr Access-Umfeld</label>
+              <select id="umfang" name="umfang">
+                <option value="">Bitte wählen …</option>
+                <option>Eine Datenbank</option>
+                <option>Mehrere Datenbanken (2–10)</option>
+                <option>Viele Datenbanken (über 10)</option>
+                <option>Noch unklar</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="zeitraum">Wunschzeitraum <small>(optional)</small></label>
+              <input id="zeitraum" name="zeitraum" type="text" placeholder="z. B. nächste Woche, vormittags" maxlength="120">
+            </div>
+            <div class="field full">
+              <label for="nachricht">Nachricht <small>(optional)</small></label>
+              <textarea id="nachricht" name="nachricht" maxlength="1500" placeholder="Was möchten Sie mit der Analyse erreichen?"></textarea>
+            </div>
+            <div class="field hp" aria-hidden="true">
+              <label for="webseite">Webseite</label>
+              <input id="webseite" name="webseite" type="text" tabindex="-1" autocomplete="off">
+            </div>
+            <div class="field full consent">
+              <input id="datenschutz" name="datenschutz" type="checkbox" required>
+              <label for="datenschutz">Ich habe die <a href="datenschutz.html">Datenschutzhinweise</a> gelesen und bin damit einverstanden, dass Sie mich zur Demo-Anfrage kontaktieren. *</label>
+            </div>
+            <div class="field full">
+              <button class="btn btn-primary btn-block" type="submit">Demo anfordern</button>
+            </div>
+          </div>
+          <p class="form-note">* Pflichtfelder. Beim Absenden öffnet sich Ihr E-Mail-Programm mit einer vorbereiteten Nachricht, die Sie nur noch abschicken müssen.</p>
+          <div id="demo-status" class="form-status" role="status" aria-live="polite"></div>
+        </form>
       </div>
     </div>
   </section>
@@ -207,9 +224,9 @@
     <div class="wrap">
       <div class="final-box">
         <h2>Bringen Sie Klarheit in Ihre Access-Datenbank.</h2>
-        <p class="muted">Ein Upload. Eine verständliche Bestandsaufnahme. Eine bessere Grundlage für Ihre nächste Entscheidung.</p>
+        <p>Eine Datei. Ein verständlicher Bericht. Eine bessere Grundlage für Ihre nächste Entscheidung.</p>
         <div class="actions" style="justify-content:center">
-          <a class="btn btn-primary" href="https://www.accessklar.de/hochladen/">Access-Datei analysieren</a>
+          <a class="btn btn-primary" href="#demo">Jetzt Demo anfordern</a>
         </div>
       </div>
     </div>
@@ -218,14 +235,15 @@
 
 <footer>
   <div class="wrap footer-row">
-    <div>© 2026 AccessKlar</div>
+    <div>© 2026 AccessAnalyzer</div>
     <div class="legal">
-      <a href="https://www.accessklar.de/agb/">AGB</a>
-      <a href="https://www.accessklar.de/widerruf/">Widerruf</a>
-      <a href="https://www.accessklar.de/impressum/">Impressum</a>
-      <a href="https://www.accessklar.de/datenschutz/">Datenschutz</a>
+      <a href="mailto:demo@access-analyzer.de">Kontakt</a>
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
     </div>
   </div>
 </footer>
+<script src="demo.js" defer></script>
 </body>
 </html>
+
